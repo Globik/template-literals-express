@@ -76,8 +76,15 @@ return `
 module.exports = {main_page}
 ```
 ## API
-1. res.rendel - is a mimic of express's res.render function. `res.rendel('file_name',{options})`
-2. res.compile - the same as res.rendel but returns only a compiled string. Usful for ajax calls from client side.
+1. `res.rendel` - is a mimic of express's res.render function. Get the compiled string and send it to the client. 
+`res.rendel('file_name',{options:variables})`
+2. `res.compile` - the same as `res.rendel` but returns only a compiled string. Usful for ajax calls from client side.
+`res.compile('file_name',{options:variables})`
+It can be done so:
+
+```js
+res.send({content:res.compile('file_name',{variables})})
+```
 
 ## Options
 1. developmnet - true or false. By default false. If false `hotreloader.js` will not work.
@@ -85,7 +92,7 @@ module.exports = {main_page}
 
 ## Error handler
 
-Via try catch traps errors and displays to the browser.
+Via `try{}catch(e){}` traps the errors and displays  them to the browser.
 
 ## Note
 Nested directories `template-literals-express` does not support. 
@@ -110,7 +117,7 @@ const admin_articles = n => {return `blah blah blah`}
 
 module.exports = {admin_articles}
 
-ctx.render('admin_articles', {})
+res.rendel('admin_articles', {})
 ```
 ## Hot-reloading
 
@@ -231,9 +238,9 @@ module.exports = {vidget_hello_world}
 
 //router.js
 
-router.post('/get_date_vidget', async ctx = > {
+app.post('/get_date_vidget', (req,res) => {
 var date = new Date();
-ctx.body = {info: "OK", content: ctx.render('vidget_hello_world',{date: date})}
+res.send{info: "OK", content: res.compile('vidget_hello_world',{date: date})}
 })
 
 // on a client side the ajax post-call to '/get_date_vidget':
